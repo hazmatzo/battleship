@@ -1,0 +1,33 @@
+<head>
+  <title>Battleship</title>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>Battleship</h1>
+    </header>
+
+    <div class="unit">
+      <h2>My Opponent</h2>
+
+      {{#opponent_rows}}
+        <div class="row">
+        {{#cells}}
+          <div class="{{class}} unit size1of10">&nbsp;*</div>
+        {{/cells}}
+      </div>
+      {{/opponent_rows}}
+    </div>
+    <div class="unit">
+      <h2>Me</h2>
+      {{#my_rows}}
+      <div class="row">
+        {{#cells}}
+          <div class="{{class}} unit size1of10">&nbsp;*</div>
+        {{/cells}}
+      </div>
+      {{/my_rows}}
+    </div>
+  </div>
+</body>
