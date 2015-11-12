@@ -6,28 +6,24 @@ class Board < ActiveRecord::Base
   SHIPS = [5, 4, 3, 2, 2]
 
   def build
-    add_cells
+    add_cells(10)
     ships = create_ships
     place_ships(ships)
     self
   end
 
-  private
-
-  def add_cells
-    (1..10).each do |row|
-      (1..10).each do |column|
+  def add_cells(num)
+    (1..num).each do |row|
+      (1..num).each do |column|
         Cell.create(row: row, column: column, board_id: id)
       end
     end
   end
 
   def create_ships
-    ships = []
-    SHIPS.each do |size|
-      ships << Ship.create(size: size, board_id: id)
+    SHIPS.map do |size|
+      Ship.create(size: size, board_id: id)
     end
-    ships
   end
 
   def place_ships(ships)
@@ -43,7 +39,7 @@ class Board < ActiveRecord::Base
   end
 
   def pick_a_number
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].shuffle.last
+    (1..10).to_a.shuffle.last
   end
 
   def pick_a_direction
@@ -99,7 +95,7 @@ class Board < ActiveRecord::Base
   def all_empty?(cells)
     all_empty = true
     cells.each do |cell|
-      if cell.ship != nil
+      if cell && cell.ship
         all_empty = false
       end
     end
