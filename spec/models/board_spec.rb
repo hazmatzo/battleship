@@ -38,15 +38,40 @@ describe Board do
     before do
     end
 
-    it 'places the ship on the board' do
+    it 'places the ship on the board cells' do
+      board = Board.create
+      board.add_cells(10)
+      ship = Ship.create(size: 3, board_id: board.id)
+      board.place_ships([ship])
+
+      expect(board.ships.take.cells.count).to eq 3
+      expect(ship.cells.count).to eq 3
+    end
+
+    it 'places the ship on the board cells' do
       board = Board.create
       board.add_cells(10)
       ship = Ship.create(size: 2, board_id: board.id)
       board.place_ships([ship])
 
-      puts board.id.inspect
-      expect(Ship.last.board_id).to eq board.id
-      expect(board.ships.take.cell_id.count).to eq 2
+      expect(board.ships.take.cells.count).to eq 2
+      expect(ship.cells.count).to eq 2
+    end
+
+    it 'doesnt overlap two ships' do
+      board = Board.create
+      random = double("Random")
+      allow(random).to receive(:new)
+      allow(random).to receive(:rand).and_return(1, 7)
+      board.add_cells(10)
+      ship1 = Ship.create(size: 2, board_id: board.id)
+      ship2 = Ship.create(size: 3, board_id: board.id)
+      ships = [ship2, ship1]
+      board.place_ships(ships, random)
+
+      expect(board.ships.count).to eq 2
+      expect(ship2.cells.count).to eq ship2.size
+      expect(ship1.cells.count).to eq ship1.size
     end
   end
 end
